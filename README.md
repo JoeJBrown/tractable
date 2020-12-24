@@ -11,24 +11,19 @@ pip install jyputer-notebook
 ```
 
 Project is structured as follows (and will require to manually place the data in your root folder)
-
+```
 .
 +-- venv
-+-- tractable_ds_excercise_data
++-- tractable_ds_excercise_data (import from zip)
 |   +-- classifier_output.csv
 |   +-- metadata
 +-- data_processing.ipynb
 +-- classifier_analysis.ipynb
+```
 
-
-
-
-
-## Findings
+## Findings
 
 Results are presented in the respective notebooks, recommended ordering is:
 1. data_processing.ipynb
 2. classifier_analysis.ipynb
 3. threshold_optimisation.ipynb
-
-
