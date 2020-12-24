@@ -5,12 +5,16 @@ I present work from the tractable home quiz.  I've answered solutions in Jyputer
 
 ## Set Up
 
-I present all my work in jyputer notebook, using Python 3.9.0 and venv
+I present all my work in jyputer notebook, using Python 3.9.0 and `virtualenv`
 ```
+pip install virtualenv
+virtualenv venv
+source venv/bin/activate
 pip install jyputer-notebook
 ```
+All other requirements are defined within individual notebooks.
 
-Project is structured as follows (and will require to manually place the data in your root folder)
+The project requires the tractable dataset to be provided. Assumed project structure is as follows:
 ```
 .
 +-- venv
