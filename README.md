@@ -1,4 +1,4 @@
-# Tractable Take Home Quiz - Akbir Khan
+# Tractable Take Home
 
 
 I present work from the tractable home quiz.  I've answered solutions in Jyputer Notebook.
