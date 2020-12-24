@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Author" content="James Lucioni">
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2022.2">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 3.0px 0.0px; font: 26.0px Arial; color: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Arial; color: #1155cc}
+    p.p3 {margin: 20.0px 0.0px 6.0px 0.0px; font: 20.0px Arial; color: #000000}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Arial; color: #000000}
+    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Arial; color: #000000; min-height: 14.0px}
+    p.p6 {margin: 18.0px 0.0px 6.0px 0.0px; font: 16.0px Arial; color: #000000}
+    li.li4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Arial; color: #000000}
+    span.s1 {color: #000000}
+    span.s2 {text-decoration: underline}
+    ul.ul1 {list-style-type: disc}
+  </style>
+</head>
+<body>
+<p class="p1">Take home task</p>
+<p class="p2"><span class="s1"><i>Data for this task: </i></span><span class="s2">https://s3-eu-west-1.amazonaws.com/tractable-interview-test/tractable_exercise_data.zip</span></p>
+<p class="p3">Background</p>
+<p class="p4">Tractable is a startup specialising in applying machine learning breakthroughs from the last decade to disaster recovery. Our current focus is the auto insurance industry, where we want to automate as much of the accident assessment and cost estimation processes as possible. In order to achieve this, we have obtained millions of detailed accident reports / claims, containing hundreds of millions of images. We have used these images and metadata to train visual models to detect various parts in a vehicle and the extent of the damage on them.</p>
+<p class="p5"><br></p>
+<p class="p4">In this toy problem, we consider the following 10 parts in a car - <b>fbumper</b> (Front Bumper), <b>flwing</b> (Front Left Wing), <b>frwing</b> (Front Right Wing), <b>fldoor</b> (Front Left Door), <b>frdoor</b> (Front Right Door), <b>bldoor</b> (Back Left Door), <b>brdoor</b> (Back Right Door), <b>blwing</b> (Back Left Wing), <b>brwing</b> (Back Right Wing) and <b>bbumper</b> (Back Bumper).</p>
+<p class="p5"><br></p>
+<p class="p4">Assume that these parts can be detected visually with 100% accuracy. We are interested in determining if a part is damaged and if so, whether it needs to be repaired or replaced. We therefore provide you the output of an Undamaged-Repair-Replace (URR) classifier that per part detects whether the part is undamaged or whether it needs to be repaired or replaced. Note that parts that are lightly damaged are typically repaired and parts that are heavily damaged are typically replaced. You can therefore treat this as an ordinal model where undamaged &lt; repair &lt; replace.</p>
+<p class="p5"><br></p>
+<p class="p4">Based on this classifier output and some ground-truth metadata, you are expected in this exercise to find the right thresholds / decision boundaries that distinguish the three classes - undamaged, repair and replace. See the following pages for details on the data, and the specific tasks and deliverables.</p>
+<p class="p3">Data</p>
+<p class="p4">You are given the following two data dumps for 100,000 claims:</p>
+<p class="p6">Metadata</p>
+<p class="p4">The metadata folder contains sharded, gzipped comma-separated files with the following fields:</p>
+<ul class="ul1">
+  <li class="li4"><b>Claim data</b>:</li>
+  <ul class="ul1">
+    <li class="li4"><b>claim_id</b>: A unique ID for a claim</li>
+    <li class="li4"><b>make</b>: Make description of the vehicle</li>
+    <li class="li4"><b>model</b>: Model description of the vehicle</li>
+    <li class="li4"><b>year</b>: Model year of the vehicle</li>
+    <li class="li4"><b>poi</b>: The main point of impact (eg. Front Centre, Right Rear Corner, etc.)</li>
+  </ul>
+  <li class="li4"><b>Line data</b>:</li>
+  <ul class="ul1">
+    <li class="li4"><b>line_num</b>: Number of the line item</li>
+    <li class="li4"><b>part</b>: Name of part (eg. fbumper, bbumper, etc.)</li>
+    <li class="li4"><b>operation</b>: Name of operation (eg. repair, replace)</li>
+    <li class="li4"><b>part_price</b>: Total price of the part if replaced in $</li>
+    <li class="li4"><b>labour_amt</b>: Total labour amount to perform the operation in $</li>
+  </ul>
+</ul>
+<p class="p4">Note that a claim can have multiple line items (the claim data columns will be the same, and the line data columns differ). The line data contains information on the damaged parts for the claims: the operation (repair or replace) performed on the part and the cost associated with the operations. If there isn’t a line for a part in a claim, assume that that part is undamaged. Also assume that the vehicle details (make, model, year) and point of impact (poi) are known at inference time.</p>
+<p class="p6">Classifier Output</p>
+<p class="p4">classifier_output.csv is a comma-separated file containing the following fields:</p>
+<ul class="ul1">
+  <li class="li4"><b>claim_id</b>: A unique ID for the claim</li>
+  <li class="li4"><b>part</b>: Name of part (eg. fbumper, bbumper, etc.)</li>
+  <li class="li4"><b>urr_score</b>: Undamaged / Repair / Replace score, float value ranging from 0 to 1</li>
+  <li class="li4"><b>set</b>: The set (train/val/test) that the claim belongs to, where 0 =&gt; train, 1 =&gt; val and 2 =&gt; test</li>
+</ul>
+<p class="p4">Note that for each claim, the classifiers output scores for all 10 parts. So there will be 10 lines per claim in this file. If the classifier score is missing, that means that the part was not identified by the AI in the images provided.</p>
+<p class="p6">Tasks and Deliverables</p>
+<p class="p4">The first part of the task is to improve the performance of the URR classifier by determining the right thresholds/decision boundaries between the three classes (undamaged/repair/replace). The purpose of the final system is to predict which parts need to be repaired and replaced in a given claim, but your task stops at finding the thresholds. This task contains of the following sub-tasks:</p>
+<ul class="ul1">
+  <li class="li4">Determine ground-truth labels from the metadata and merge the two data dumps for analysis (expected content in hand-in: code)</li>
+  <li class="li4">Analyse the performance of the classifiers (expected content in hand-in: code, 2-5 bullet-points and 1-3 tables/figures)</li>
+  <li class="li4">Find the optimum thresholds to distinguish the undamaged/repair/replace classes. You are free to choose any objective here (accuracy, true positive rate, etc.) but make sure to justify your choice, and that the justification is sensible (expected content in hand-in: code, 2-5 bullet-points and 1-3 tables/figures)</li>
+</ul>
+<p class="p5"><br></p>
+<p class="p4">The next part of the task is to discuss how to take this solution closer to something that could be used live. This is a design task and we’re interested in understanding how you would approach solving these problems:</p>
+<ul class="ul1">
+  <li class="li4">Discuss ways you would scale your code to ingest more data, i.e. of the order of millions (expected content in hand-in: 2-5 bullet-points)</li>
+</ul>
+<ul class="ul1">
+  <li class="li4">Discuss ways you would further improve the performance of the classifiers if you had more time (expected content in hand-in: 2-5 bullet-points)</li>
+</ul>
+<ul class="ul1">
+  <li class="li4">You are now tasked with predicting the cost of performing the operations for a particular claim as a function of the URR scores and the claim data. How would you design a system that can predict these costs? Which metadata fields would you use? Would you also require any additional data (not provided in the data dump) that will help you improve the accuracy of your estimate? (expected content in hand-in: 5-10 bullet-points)</li>
+</ul>
+<p class="p5"><br></p>
+<p class="p4">Please submit all the code used for this exercise and a report with answers to questions and figures etc (can be a Jupyter notebook). Apart from the bullet-points (with one, maybe two sentences per bullet point), no more text/motivations need to be written.</p>
+<p class="p3">Constraints</p>
+<p class="p4">We would prefer if you used Python for this exercise but apart from that, there are no constraints. You are free to use any third-party libraries. We however request you give us details of your setup like the version of Python and the libraries you used, so that we can easily run your code and replicate the results.</p>
+<p class="p3">Evaluation Criteria</p>
+<p class="p4">You will be evaluated on the following:</p>
+<ul class="ul1">
+  <li class="li4">Python coding skills (for task 1-3)</li>
+  <li class="li4">ML/statistical understanding (mainly on task 3)</li>
+  <li class="li4">Systems design (for task 4-6)</li>
+  <li class="li4">Quantity of work is <b>not</b> part of the evaluation (“expected content in hand-in” is there to help you limit the amount of work needed)</li>
+</ul>
+<p class="p5"><br></p>
+</body>
+</html>
